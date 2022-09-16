@@ -7,17 +7,21 @@ import useLocalStorage from 'react-use-localstorage';
 import Tema from '../../../models/Tema';
 import { buscaId, deleteId } from '../../../services/Service';
 import { toast } from 'react-toastify';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+import { useSelector } from 'react-redux';
 
 
 function DeletarTema() {
   let navigate = useNavigate();
   const { id } = useParams<{id: string}>();
-  const [token, setToken] = useLocalStorage('token');
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+    (state) => state.tokens
+  );
   const [tema, setTema] = useState<Tema>()
 
   useEffect(() => {
       if (token == "") {
-          toast.error('Você precisa estar logado', {
+        toast.error('Você precisa estar logado', {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -26,7 +30,7 @@ function DeletarTema() {
           draggable: false,
           theme: "colored",
           progress: undefined,
-      });
+          });
           navigate("/login")
   
       }
@@ -62,7 +66,7 @@ function DeletarTema() {
             draggable: false,
             theme: "colored",
             progress: undefined,
-        });
+            });
         }
       
         function nao() {

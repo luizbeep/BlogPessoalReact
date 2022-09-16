@@ -6,12 +6,16 @@ import useLocalStorage from 'react-use-localstorage';
 import { buscaId, post, put } from '../../../services/Service';
 import './CadastroTema.css';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
 
 
 function CadastroTema() {
     let navigate = useNavigate();
     const { id } = useParams<{id: string}>();
-    const [token, setToken] = useLocalStorage('token');
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+      );
     const [tema, setTema] = useState<Tema>({
         id: 0,
         descricao: ''
@@ -19,7 +23,7 @@ function CadastroTema() {
 
     useEffect(() => {
         if (token == "") {
-                toast.error('Você precisa estar logado', {
+            toast.error('Você precisa estar logado', {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -28,7 +32,7 @@ function CadastroTema() {
                 draggable: false,
                 theme: "colored",
                 progress: undefined,
-            });
+                });
             navigate("/login")
     
         }
@@ -68,7 +72,7 @@ function CadastroTema() {
                         'Authorization': token
                     }
                 })
-                    toast.success('Tema atualizado com sucesso', {
+                toast.success('Tema atualizado com sucesso', {
                     position: "top-right",
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -77,14 +81,14 @@ function CadastroTema() {
                     draggable: false,
                     theme: "colored",
                     progress: undefined,
-                });
+                    });
             } else {
                 post(`/tema`, tema, setTema, {
                     headers: {
                         'Authorization': token
                     }
                 })
-                    toast.success('Tema cadastrado com sucesso', {
+                toast.success('Tema cadastrado com sucesso', {
                     position: "top-right",
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -93,14 +97,14 @@ function CadastroTema() {
                     draggable: false,
                     theme: "colored",
                     progress: undefined,
-                });
+                    });
             }
             back()
     
         }
     
         function back() {
-           navigate('/temas')
+            navigate('/temas')
         }
   
     return (
